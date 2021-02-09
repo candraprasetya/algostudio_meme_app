@@ -47,6 +47,7 @@ class _ShareScreenState extends State<ShareScreen> {
                             tempImage,
                             height: 60,
                             width: 60,
+                            fit: BoxFit.cover,
                           ).p16(),
                         ).make()
                       : SizedBox(),

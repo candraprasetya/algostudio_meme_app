@@ -48,6 +48,7 @@ class _DownloadScreenState extends State<DownloadScreen> {
                             tempImage,
                             height: 60,
                             width: 60,
+                            fit: BoxFit.cover,
                           ).p16(),
                         ).make()
                       : SizedBox(),

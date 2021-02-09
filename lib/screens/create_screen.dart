@@ -64,6 +64,7 @@ class _CreateScreenState extends State<CreateScreen> {
                       state.image,
                       height: 60,
                       width: 60,
+                      fit: BoxFit.cover,
                     ).p16(),
                   ).make()
                 : (tempImage != null)
