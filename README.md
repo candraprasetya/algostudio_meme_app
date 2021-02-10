@@ -2,13 +2,13 @@
 <br />
 <p align="center">
   <a href="https://github.com/candraprasetya/algostudio_meme_app">
-    <img src="assets/images/logo.png" alt="Logo" height="80">
+    <img src="assets/logo.png" alt="Logo" height="80">
   </a>
 
-  <h3 align="center">Ngedev - Login Page</h3>
+  <h3 align="center">AlgoStudio - Pretest Meme App</h3>
 
   <p align="center">
-    An awesome Login page ui template to jumpstart your projects using Flutter!
+    An awesome meme generator app ui template to jumpstart your projects using Flutter!
     <br />
     <br />
     <a href="#">View Demo</a>
@@ -48,7 +48,7 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://kardusinfo.com)
 
-This project is the process of making a flutter application from the UI design that has been made, namely the login page.
+This project is the process of making a flutter application from the UI design that has been made, namely the meme generator.
 
 ### Built With
 
@@ -63,7 +63,7 @@ the first step to starting the project is to prepare the following requirements.
 
 ### Installation
 
-1. Clone the repo and move to base_project branch
+1. Clone the repo and move to main branch
    ```sh
    git clone https://github.com/candraprasetya/algostudio_meme_app.git
    ```
