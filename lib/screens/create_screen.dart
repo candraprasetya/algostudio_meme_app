@@ -32,6 +32,10 @@ class _CreateScreenState extends State<CreateScreen> {
       onWillPop: () {
         context.read<MemeCubit>().refresh();
         Get.back();
+        setState(() {
+          tempImage = null;
+          tempUrl = null;
+        });
         return;
       },
       child: Scaffold(
@@ -72,6 +76,7 @@ class _CreateScreenState extends State<CreateScreen> {
                         child: Image.file(
                           tempImage,
                           height: 60,
+                          fit: BoxFit.cover,
                           width: 60,
                         ).p16(),
                       ).make()
