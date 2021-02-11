@@ -54,7 +54,10 @@ This project is the process of making a flutter application from the UI design t
 
 In this project, we had the opportunity to try one of the frameworks for UI design purposes.
 * [Flutter](https://flutter.dev)
-
+* [BLOC State Management](https://bloclibrary.dev/)
+* [GetX](https://pub.dev/packages/get)
+* [Velocity X](https://velocityx.dev/)
+* [Etc.]
 
 <!-- GETTING STARTED -->
 ## Getting Started
