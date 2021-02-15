@@ -21,10 +21,8 @@ class _ShareScreenState extends State<ShareScreen> {
         return;
       },
       child: Scaffold(
-        backgroundColor: color.background,
         appBar: AppBar(
           elevation: 0.0,
-          backgroundColor: Vx.white,
           centerTitle: true,
           iconTheme: IconThemeData(color: Vx.black),
           title: 'Share Meme'
@@ -38,7 +36,6 @@ class _ShareScreenState extends State<ShareScreen> {
             RepaintBoundary(
               key: globalKey,
               child: Material(
-                color: Vx.white,
                 child: ZStack([
                   Image.network(tempUrl).p16(),
                   (tempImage != null)
@@ -64,8 +61,8 @@ class _ShareScreenState extends State<ShareScreen> {
                           elevation: 0.0,
                           primary: color.secondary),
                       onPressed: () {},
-                      icon: Icon(Icons.image),
-                      label: 'Share To Facebook'.text.make()),
+                      icon: Icon(FontAwesomeIcons.facebook),
+                      label: 'Facebook'.text.make()),
                 ),
                 16.widthBox,
                 Expanded(
@@ -76,7 +73,7 @@ class _ShareScreenState extends State<ShareScreen> {
                           primary: color.accent),
                       onPressed: () {},
                       icon: Icon(Icons.title),
-                      label: 'Share To Twitter'.text.make()),
+                      label: 'Twitter'.text.make()),
                 )
               ]).p16(),
             )

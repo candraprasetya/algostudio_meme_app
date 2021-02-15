@@ -15,10 +15,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: color.background,
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: Vx.white,
         leading: Image.asset('assets/logo.png').p16(),
         centerTitle: true,
         title: 'AlgoMemes'
@@ -26,6 +24,23 @@ class _HomeScreenState extends State<HomeScreen> {
             .textStyle(textStyle.blackStyle1)
             .maxLines(1)
             .make(),
+        actions: [
+          BlocBuilder<ScreenCubit, ScreenState>(
+            builder: (context, state) {
+              if (state is ThemeDarkState) {
+                return IconButton(
+                    icon: Icon(Icons.brightness_3_rounded),
+                    onPressed: () => context.read<ScreenCubit>().changeTheme());
+              }
+              return IconButton(
+                  icon: Icon(
+                    Icons.wb_sunny,
+                    color: color.semanticBlack,
+                  ),
+                  onPressed: () => context.read<ScreenCubit>().changeTheme());
+            },
+          )
+        ],
       ),
       body: BlocBuilder<MemeCubit, MemeState>(
         builder: (context, state) {
@@ -44,10 +59,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             state.memes[index]['url'],
                             fit: BoxFit.cover,
                           ))).make().p16().onTap(() {
-                    Get.toNamed('/create', arguments: [
-                      state.memes[index]['id'],
-                      state.memes[index]['url']
-                    ]);
+                    context.read<ScreenCubit>().goToCreateScreen(
+                        state.memes[index]['id'], state.memes[index]['url']);
                   });
                 },
               ),

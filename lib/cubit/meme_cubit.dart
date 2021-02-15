@@ -12,7 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
-
+import 'package:share_files_and_screenshot_widgets/share_files_and_screenshot_widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 part 'meme_state.dart';
@@ -44,9 +44,7 @@ class MemeCubit extends Cubit<MemeState> {
     print(info);
   }
 
-  void saveMeme(
-    GlobalKey globalKey,
-  ) async {
+  void saveMeme(GlobalKey globalKey) async {
     try {
       RenderRepaintBoundary boundary =
           globalKey.currentContext.findRenderObject();
@@ -66,6 +64,17 @@ class MemeCubit extends Cubit<MemeState> {
       emit(GettingMemes(memes));
     } else {
       emit(ErrorGettingMemes());
+    }
+  }
+
+  void shareToFriends(GlobalKey globalKey) async {
+    try {
+      ShareFilesAndScreenshotWidgets().shareScreenshot(
+          globalKey, 800, "Title", "Meme.png", "image/png",
+          text: "This is the caption!");
+      Get.snackbar("Saving Meme", "Berhasil di simpan ke gallery");
+    } catch (e) {
+      Get.snackbar("Saving Meme", "Gagal menyimpan ke gallery");
     }
   }
 

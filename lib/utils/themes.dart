@@ -17,3 +17,17 @@ mixin textStyle {
 
 String tempUrl;
 File tempImage;
+mixin theme {
+  static ThemeData darkTheme = ThemeData(
+    accentColor: color.accent,
+    brightness: Brightness.dark,
+    backgroundColor: color.background,
+    primaryColor: color.primary,
+  );
+
+  static ThemeData lightTheme = ThemeData(
+      accentColor: color.accent,
+      brightness: Brightness.light,
+      backgroundColor: color.background,
+      primaryColor: color.primary);
+}

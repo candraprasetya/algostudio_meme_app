@@ -39,10 +39,8 @@ class _CreateScreenState extends State<CreateScreen> {
         return;
       },
       child: Scaffold(
-        backgroundColor: color.background,
         appBar: AppBar(
           elevation: 0.0,
-          backgroundColor: Vx.white,
           centerTitle: true,
           iconTheme: IconThemeData(color: Vx.black),
           title: 'Create Meme'
@@ -60,7 +58,12 @@ class _CreateScreenState extends State<CreateScreen> {
                         : url)
                 .p16()
                 .onTap(() {
-              Get.toNamed('/download');
+              if (tempUrl != null) {
+                Get.toNamed('/download');
+              } else {
+                Get.snackbar('Gagal Membuka',
+                    'Silahkan menambahkan text terlebih dahulu');
+              }
             }),
             (state is UploadLogoMeme)
                 ? VxBox(
@@ -142,7 +145,6 @@ class _AddTextState extends State<AddText> {
     return Material(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-        color: color.background,
         child: VStack([
           'Add Text'.text.textStyle(textStyle.blackStyle1).xl.make().p16(),
           VxBox(
@@ -180,6 +182,7 @@ class _AddTextState extends State<AddText> {
                       Get.back();
                       Get.snackbar('Error', 'Please fill all fields');
                     } else {
+                      Get.back();
                       context.read<MemeCubit>().sendMeme(widget.id, widget.url,
                           widget.text1.text, widget.text2.text);
                       setState(() {});
