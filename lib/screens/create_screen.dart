@@ -59,7 +59,7 @@ class _CreateScreenState extends State<CreateScreen> {
                 .p16()
                 .onTap(() {
               if (tempUrl != null) {
-                Get.toNamed('/download');
+                context.read<ScreenCubit>().goToDownloadScreen();
               } else {
                 Get.snackbar('Gagal Membuka',
                     'Silahkan menambahkan text terlebih dahulu');
@@ -107,12 +107,12 @@ class _CreateScreenState extends State<CreateScreen> {
                           elevation: 0.0,
                           primary: color.accent),
                       onPressed: () {
-                        Get.bottomSheet(AddText(
-                          text1: text1,
-                          text2: text2,
-                          id: id,
-                          url: url,
-                        ));
+                        context.read<ScreenCubit>().openBottomSheet(AddText(
+                              text1: text1,
+                              text2: text2,
+                              id: id,
+                              url: url,
+                            ));
                       },
                       icon: Icon(Icons.title),
                       label: 'Add Text'.text.make()),
@@ -182,10 +182,9 @@ class _AddTextState extends State<AddText> {
                       Get.back();
                       Get.snackbar('Error', 'Please fill all fields');
                     } else {
-                      Get.back();
                       context.read<MemeCubit>().sendMeme(widget.id, widget.url,
                           widget.text1.text, widget.text2.text);
-                      setState(() {});
+                      Get.back();
                     }
                   },
                   icon: Icon(Icons.send),

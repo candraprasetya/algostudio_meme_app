@@ -29,7 +29,6 @@ class MyApp extends StatelessWidget {
               GetPage(name: '/home', page: () => HomeScreen()),
               GetPage(name: '/create', page: () => CreateScreen()),
               GetPage(name: '/download', page: () => DownloadScreen()),
-              GetPage(name: '/share', page: () => ShareScreen())
             ],
           ),
         ));

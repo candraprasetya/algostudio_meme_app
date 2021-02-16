@@ -9,6 +9,10 @@ class HomeScreenState extends ScreenState {}
 
 class CreateScreenState extends ScreenState {}
 
+class DownloadScreenState extends ScreenState {}
+
 class ThemeDarkState extends ScreenState {}
 
 class ThemeLightState extends ScreenState {}
+
+class BottomSheetOpenState extends ScreenState {}

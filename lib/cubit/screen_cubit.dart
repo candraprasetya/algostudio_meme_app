@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
@@ -9,6 +10,12 @@ class ScreenCubit extends Cubit<ScreenState> {
 
   void goToCreateScreen(String id, String url) {
     Get.toNamed('/create', arguments: [id, url]);
+    emit(CreateScreenState());
+  }
+
+  void goToDownloadScreen() {
+    Get.toNamed('/download');
+    emit(DownloadScreenState());
   }
 
   void changeTheme() {
@@ -17,5 +24,10 @@ class ScreenCubit extends Cubit<ScreenState> {
     } else {
       emit(ThemeDarkState());
     }
+  }
+
+  void openBottomSheet(Widget bottomSheet) {
+    Get.bottomSheet(bottomSheet);
+    emit(BottomSheetOpenState());
   }
 }

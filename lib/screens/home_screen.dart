@@ -52,16 +52,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: (context.isPortrait) ? 3 : 4),
                 itemBuilder: (context, index) {
-                  return VxBox(
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            state.memes[index]['url'],
-                            fit: BoxFit.cover,
-                          ))).make().p16().onTap(() {
-                    context.read<ScreenCubit>().goToCreateScreen(
-                        state.memes[index]['id'], state.memes[index]['url']);
-                  });
+                  return DelayedDisplay(
+                    delay: Duration(milliseconds: 100 + (30 * index)),
+                    child: VxBox(
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              state.memes[index]['url'],
+                              fit: BoxFit.cover,
+                            ))).make().p16().onTap(() {
+                      context.read<ScreenCubit>().goToCreateScreen(
+                          state.memes[index]['id'], state.memes[index]['url']);
+                    }),
+                  );
                 },
               ),
             );
