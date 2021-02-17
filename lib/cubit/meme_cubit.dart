@@ -71,10 +71,9 @@ class MemeCubit extends Cubit<MemeState> {
     try {
       ShareFilesAndScreenshotWidgets().shareScreenshot(
           globalKey, 800, "Title", "Meme.png", "image/png",
-          text: "This is the caption!");
-      Get.snackbar("Saving Meme", "Berhasil di simpan ke gallery");
+          text: "Saya punya meme lucu!");
     } catch (e) {
-      Get.snackbar("Saving Meme", "Gagal menyimpan ke gallery");
+      Get.snackbar("Saving Meme", "Gagal mengirim");
     }
   }
 

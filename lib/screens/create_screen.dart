@@ -9,6 +9,9 @@ class _CreateScreenState extends State<CreateScreen> {
   String id = Get.arguments[0];
   String url = Get.arguments[1];
 
+  double top = 16.0;
+  double left = 16.0;
+
   TextEditingController text1;
   TextEditingController text2;
 
@@ -50,76 +53,91 @@ class _CreateScreenState extends State<CreateScreen> {
               .make(),
         ),
         body: BlocBuilder<MemeCubit, MemeState>(builder: (context, state) {
-          return ZStack([
-            Image.network((state is GenerateTextMeme)
-                    ? state.argumentUrl.url
-                    : (tempUrl != null)
-                        ? tempUrl
-                        : url)
-                .p16()
-                .onTap(() {
-              if (tempUrl != null) {
-                context.read<ScreenCubit>().goToDownloadScreen();
-              } else {
-                Get.snackbar('Gagal Membuka',
-                    'Silahkan menambahkan text terlebih dahulu');
-              }
-            }),
-            (state is UploadLogoMeme)
-                ? VxBox(
-                    child: Image.file(
-                      state.image,
-                      height: 60,
-                      width: 60,
-                      fit: BoxFit.cover,
-                    ).p16(),
-                  ).make()
-                : (tempImage != null)
-                    ? VxBox(
+          return GestureDetector(
+            onVerticalDragUpdate: (details) {
+              setState(() {
+                top = details.localPosition.dy;
+                left = details.localPosition.dx;
+              });
+            },
+            child: ZStack([
+              Image.network((state is GenerateTextMeme)
+                      ? state.argumentUrl.url
+                      : (tempUrl != null)
+                          ? tempUrl
+                          : url)
+                  .p16()
+                  .onTap(() {
+                if (tempUrl != null) {
+                  context.read<ScreenCubit>().goToDownloadScreen(top, left);
+                } else {
+                  Get.snackbar('Gagal Membuka',
+                      'Silahkan menambahkan text terlebih dahulu');
+                }
+              }),
+              (state is UploadLogoMeme)
+                  ? Positioned(
+                      left: left,
+                      top: top,
+                      child: VxBox(
                         child: Image.file(
-                          tempImage,
+                          state.image,
                           height: 60,
-                          fit: BoxFit.cover,
                           width: 60,
-                        ).p16(),
-                      ).make()
-                    : SizedBox(),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: HStack([
-                Expanded(
-                  child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.all(16),
-                          elevation: 0.0,
-                          primary: color.secondary),
-                      onPressed: () {
-                        context.read<MemeCubit>().addImage();
-                      },
-                      icon: Icon(Icons.image),
-                      label: 'Add Image'.text.make()),
-                ),
-                16.widthBox,
-                Expanded(
-                  child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.all(16),
-                          elevation: 0.0,
-                          primary: color.accent),
-                      onPressed: () {
-                        context.read<ScreenCubit>().openBottomSheet(AddText(
-                              text1: text1,
-                              text2: text2,
-                              id: id,
-                              url: url,
-                            ));
-                      },
-                      icon: Icon(Icons.title),
-                      label: 'Add Text'.text.make()),
-                )
-              ]).p16(),
-            )
-          ]);
+                          fit: BoxFit.cover,
+                        ),
+                      ).transparent.make(),
+                    )
+                  : (tempImage != null)
+                      ? Positioned(
+                          left: left,
+                          top: top,
+                          child: VxBox(
+                            child: Image.file(
+                              tempImage,
+                              height: 60,
+                              fit: BoxFit.cover,
+                              width: 60,
+                            ),
+                          ).transparent.make())
+                      : SizedBox(),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: HStack([
+                  Expanded(
+                    child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.all(16),
+                            elevation: 0.0,
+                            primary: color.secondary),
+                        onPressed: () {
+                          context.read<MemeCubit>().addImage();
+                        },
+                        icon: Icon(Icons.image),
+                        label: 'Add Image'.text.make()),
+                  ),
+                  16.widthBox,
+                  Expanded(
+                    child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.all(16),
+                            elevation: 0.0,
+                            primary: color.accent),
+                        onPressed: () {
+                          context.read<ScreenCubit>().openBottomSheet(AddText(
+                                text1: text1,
+                                text2: text2,
+                                id: id,
+                                url: url,
+                              ));
+                        },
+                        icon: Icon(Icons.title),
+                        label: 'Add Text'.text.make()),
+                  )
+                ]).p16(),
+              )
+            ]),
+          );
         }),
       ),
     );

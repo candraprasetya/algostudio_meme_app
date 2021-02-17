@@ -7,6 +7,8 @@ class DownloadScreen extends StatefulWidget {
 
 class _DownloadScreenState extends State<DownloadScreen> {
   GlobalKey globalKey = GlobalKey();
+  double top = Get.arguments[0];
+  double left = Get.arguments[1];
 
   @override
   void initState() {
@@ -40,14 +42,18 @@ class _DownloadScreenState extends State<DownloadScreen> {
                 child: ZStack([
                   Image.network(tempUrl).p16(),
                   (tempImage != null)
-                      ? VxBox(
-                          child: Image.file(
-                            tempImage,
-                            height: 60,
-                            width: 60,
-                            fit: BoxFit.cover,
-                          ).p16(),
-                        ).make()
+                      ? Positioned(
+                          top: top,
+                          left: left,
+                          child: VxBox(
+                            child: Image.file(
+                              tempImage,
+                              height: 60,
+                              width: 60,
+                              fit: BoxFit.cover,
+                            ),
+                          ).make(),
+                        )
                       : SizedBox(),
                 ]),
               ),
