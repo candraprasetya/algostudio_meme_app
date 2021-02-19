@@ -36,6 +36,8 @@ dependencies:
   permission_handler: ^5.0.1+1
   share_files_and_screenshot_widgets: ^1.0.3
   velocity_x: ^1.3.1
+  draggable_widget: ^1.1.1
+  matrix_gesture_detector: ^0.1.0
 
 dev_dependencies:
   flutter_test:

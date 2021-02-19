@@ -8,25 +8,22 @@ class CreateScreen extends StatefulWidget {
 class _CreateScreenState extends State<CreateScreen> {
   String id = Get.arguments[0];
   String url = Get.arguments[1];
-
-  double top = 16.0;
-  double left = 16.0;
-
+  List<Widget> widgets = [];
   TextEditingController text1;
-  TextEditingController text2;
-
+  GlobalKey globalKey = GlobalKey();
+  GlobalKey screenshotKey = GlobalKey();
+  Size sizenya;
   @override
   void initState() {
     super.initState();
     text1 = TextEditingController();
-    text2 = TextEditingController();
+    widgets.add(Image.network(url));
   }
 
   @override
   void dispose() {
     super.dispose();
     text1.dispose();
-    text2.dispose();
   }
 
   @override
@@ -51,56 +48,33 @@ class _CreateScreenState extends State<CreateScreen> {
               .textStyle(textStyle.blackStyle1)
               .maxLines(1)
               .make(),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.save),
+              onPressed: () {
+                context.read<MemeCubit>().saveMeme(screenshotKey);
+              },
+            )
+          ],
         ),
         body: BlocBuilder<MemeCubit, MemeState>(builder: (context, state) {
-          return GestureDetector(
-            onVerticalDragUpdate: (details) {
-              setState(() {
-                top = details.localPosition.dy;
-                left = details.localPosition.dx;
-              });
-            },
-            child: ZStack([
-              Image.network((state is GenerateTextMeme)
-                      ? state.argumentUrl.url
-                      : (tempUrl != null)
-                          ? tempUrl
-                          : url)
-                  .p16()
-                  .onTap(() {
-                if (tempUrl != null) {
-                  context.read<ScreenCubit>().goToDownloadScreen(top, left);
-                } else {
-                  Get.snackbar('Gagal Membuka',
-                      'Silahkan menambahkan text terlebih dahulu');
-                }
-              }),
-              (state is UploadLogoMeme)
-                  ? Positioned(
-                      left: left,
-                      top: top,
-                      child: VxBox(
-                        child: Image.file(
-                          state.image,
-                          height: 60,
-                          width: 60,
-                          fit: BoxFit.cover,
-                        ),
-                      ).transparent.make(),
-                    )
-                  : (tempImage != null)
-                      ? Positioned(
-                          left: left,
-                          top: top,
-                          child: VxBox(
-                            child: Image.file(
-                              tempImage,
-                              height: 60,
-                              fit: BoxFit.cover,
-                              width: 60,
-                            ),
-                          ).transparent.make())
-                      : SizedBox(),
+          return VStack(
+            [
+              WidgetSize(
+                key: globalKey,
+                onChange: (size) {
+                  setState(() {
+                    sizenya = size;
+                  });
+                },
+                child: VxBox(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: RepaintBoundary(
+                        key: screenshotKey, child: ZStack(widgets)),
+                  ),
+                ).make(),
+              ).p24(),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: HStack([
@@ -111,7 +85,9 @@ class _CreateScreenState extends State<CreateScreen> {
                             elevation: 0.0,
                             primary: color.secondary),
                         onPressed: () {
-                          context.read<MemeCubit>().addImage();
+                          context
+                              .read<MemeCubit>()
+                              .addImage(widgets, size: sizenya);
                         },
                         icon: Icon(Icons.image),
                         label: 'Add Image'.text.make()),
@@ -126,9 +102,10 @@ class _CreateScreenState extends State<CreateScreen> {
                         onPressed: () {
                           context.read<ScreenCubit>().openBottomSheet(AddText(
                                 text1: text1,
-                                text2: text2,
                                 id: id,
                                 url: url,
+                                sizenya: sizenya,
+                                widgets: widgets,
                               ));
                         },
                         icon: Icon(Icons.title),
@@ -136,21 +113,62 @@ class _CreateScreenState extends State<CreateScreen> {
                   )
                 ]).p16(),
               )
-            ]),
-          );
+            ],
+          ).scrollVertical();
         }),
       ),
     );
   }
 }
 
+class WidgetSize extends StatefulWidget {
+  final Widget child;
+  final Function onChange;
+
+  const WidgetSize({
+    Key key,
+    @required this.onChange,
+    @required this.child,
+  }) : super(key: key);
+
+  @override
+  _WidgetSizeState createState() => _WidgetSizeState();
+}
+
+class _WidgetSizeState extends State<WidgetSize> {
+  @override
+  Widget build(BuildContext context) {
+    SchedulerBinding.instance.addPostFrameCallback(postFrameCallback);
+    return Container(
+      key: widgetKey,
+      child: widget.child,
+    );
+  }
+
+  var widgetKey = GlobalKey();
+  var oldSize;
+
+  void postFrameCallback(_) {
+    var context = widgetKey.currentContext;
+    if (context == null) return;
+
+    var newSize = context.size;
+    if (oldSize == newSize) return;
+
+    oldSize = newSize;
+    widget.onChange(newSize);
+  }
+}
+
 class AddText extends StatefulWidget {
   final TextEditingController text1;
-  final TextEditingController text2;
   final String id;
   final String url;
+  final Size sizenya;
+  final List<Widget> widgets;
 
-  const AddText({Key key, this.text1, this.text2, this.id, this.url})
+  const AddText(
+      {Key key, this.sizenya, this.widgets, this.text1, this.id, this.url})
       : super(key: key);
 
   @override
@@ -177,31 +195,20 @@ class _AddTextState extends State<AddText> {
                       fontWeight: FontWeight.normal, color: Vx.gray600)),
             ).pSymmetric(h: 12),
           ).white.withRounded(value: 10).make().p12(),
-          VxBox(
-            child: TextField(
-              controller: widget.text2,
-              style:
-                  textStyle.blackStyle1.copyWith(fontWeight: FontWeight.normal),
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Enter the second text',
-                  hintStyle: textStyle.blackStyle1.copyWith(
-                      fontWeight: FontWeight.normal, color: Vx.gray600)),
-            ).pSymmetric(h: 12),
-          ).white.withRounded(value: 10).make().p12(),
           ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.all(16),
                       elevation: 0.0,
                       primary: color.primary),
                   onPressed: () {
-                    if (widget.text1.text.isEmptyOrNull ||
-                        widget.text2.text.isEmptyOrNull) {
+                    if (widget.text1.text.isEmptyOrNull) {
                       Get.back();
                       Get.snackbar('Error', 'Please fill all fields');
                     } else {
-                      context.read<MemeCubit>().sendMeme(widget.id, widget.url,
-                          widget.text1.text, widget.text2.text);
+                      setState(() {
+                        context.read<MemeCubit>().addText(widget.widgets,
+                            size: widget.sizenya, text: widget.text1.text);
+                      });
                       Get.back();
                     }
                   },

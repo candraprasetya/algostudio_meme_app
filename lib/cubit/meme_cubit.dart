@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:algostudio_test_app/models/models.dart';
 import 'package:algostudio_test_app/utils/utils.dart';
+import 'package:algostudio_test_app/widgets/widgets.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,6 +36,15 @@ class MemeCubit extends Cubit<MemeState> {
     }
   }
 
+  void addText(List<Widget> widgets, {Size size, String text}) {
+    widgets.add(TransformWidget(
+      height: size.height,
+      width: size.width,
+      text: text,
+    ));
+    emit(WidgetMemeState(widgets));
+  }
+
   void requestPermission() async {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.storage,
@@ -51,8 +61,10 @@ class MemeCubit extends Cubit<MemeState> {
       ui.Image image = await boundary.toImage();
       ByteData byteData =
           await image.toByteData(format: ui.ImageByteFormat.png);
-      await ImageGallerySaver.saveImage(byteData.buffer.asUint8List());
+      Uint8List png = byteData.buffer.asUint8List();
+      await ImageGallerySaver.saveImage(png);
       Get.snackbar("Saving Meme", "Berhasil di simpan ke gallery");
+      emit(SavingMemeState(png));
     } catch (e) {
       Get.snackbar("Saving Meme", "Gagal menyimpan ke gallery");
     }
@@ -77,14 +89,19 @@ class MemeCubit extends Cubit<MemeState> {
     }
   }
 
-  Future addImage() async {
+  Future addImage(List<Widget> widgets, {Size size}) async {
     final picker = ImagePicker();
-    final pickedFile =
-        await picker.getImage(source: ImageSource.gallery, imageQuality: 20);
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       emit(UploadLogoMeme(File(pickedFile.path)));
       tempImage = File(pickedFile.path);
+      widgets.add(TransformWidget(
+        file: tempImage,
+        height: size.height,
+        width: size.width,
+        isText: false,
+      ));
     } else {
       print('No image selected.');
     }

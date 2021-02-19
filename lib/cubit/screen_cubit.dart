@@ -13,8 +13,8 @@ class ScreenCubit extends Cubit<ScreenState> {
     emit(CreateScreenState());
   }
 
-  void goToDownloadScreen(double top, double left) {
-    Get.toNamed('/download', arguments: [top, left]);
+  void goToDownloadScreen() {
+    Get.toNamed('/download');
     emit(DownloadScreenState());
   }
 
