@@ -13,13 +13,6 @@ class GettingMemes extends MemeState {
 
 class ErrorGettingMemes extends MemeState {}
 
-class GenerateTextMeme extends MemeState {
-  final ArgumentUrl argumentUrl;
-
-  GenerateTextMeme(this.argumentUrl);
-  List<Object> get props => [argumentUrl];
-}
-
 class SavingMemeState extends MemeState {
   final Uint8List image;
 

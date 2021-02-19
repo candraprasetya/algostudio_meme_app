@@ -62,7 +62,7 @@ class MemeCubit extends Cubit<MemeState> {
       ByteData byteData =
           await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List png = byteData.buffer.asUint8List();
-      await ImageGallerySaver.saveImage(png);
+      await ImageGallerySaver.saveImage(png, quality: 100);
       Get.snackbar("Saving Meme", "Berhasil di simpan ke gallery");
       emit(SavingMemeState(png));
     } catch (e) {
@@ -104,29 +104,6 @@ class MemeCubit extends Cubit<MemeState> {
       ));
     } else {
       print('No image selected.');
-    }
-  }
-
-  Future sendMeme(
-      String id, String url, String firstLine, String secondLine) async {
-    // ignore: non_constant_identifier_names
-    final String template_id = id;
-    final String username = 'cobaaja2021';
-    final String password = 'cobaaja123*';
-    final String text0 = firstLine;
-    final String text1 = secondLine;
-
-    var response = await Dio().get(
-        'https://api.imgflip.com/caption_image?template_id=$template_id&text0=$text0&text1=$text1&username=$username&password=$password');
-
-    if (response.statusCode == 200) {
-      emit(GenerateTextMeme(ArgumentUrl(
-        id: template_id,
-        url: response.data['data']['url'],
-      )));
-      tempUrl = response.data['data']['url'];
-    } else {
-      throw Exception('Failed to load memes');
     }
   }
 }
